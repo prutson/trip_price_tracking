@@ -11,7 +11,7 @@ COPY . .
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
 # Instala os navegadores do Playwright
-RUN playwright install --with-deps
+RUN playwright install chromium --with-deps
 
 # Expõe a porta da aplicação
 EXPOSE 8080
