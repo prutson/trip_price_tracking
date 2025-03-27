@@ -41,5 +41,5 @@ RUN playwright install --with-deps
 EXPOSE 5000
 
 # Comando para rodar sua aplicação
-CMD ["xvfb-run", "-a", "python", "main.py"]
+CMD ["python", "main.py"]
 
