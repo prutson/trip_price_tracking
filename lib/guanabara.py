@@ -1,17 +1,28 @@
 from playwright.async_api import async_playwright
 from lib.shared import *
+import traceback
 
 async def buscar_passagens_onibus(origem, destino, data, passageiros):
     url = f"https://viajeguanabara.com.br/onibus/{origem}/{destino}?departureDate={data}&passengers=1:{passageiros}"
     log_message(f"Fazendo busca em: {url}")
     async with async_playwright() as p:
+        # browser = await p.chromium.launch(
+        #     headless=True,
+        #     args=[
+        #         "--no-sandbox",
+        #         "--disable-setuid-sandbox",
+        #         "--disable-dev-shm-usage",
+        #         "--disable-blink-features=AutomationControlled"
+        #     ]
+        # )
         browser = await p.chromium.launch(
             headless=True,
             args=[
                 "--no-sandbox",
                 "--disable-setuid-sandbox",
                 "--disable-dev-shm-usage",
-                "--disable-blink-features=AutomationControlled"
+                "--proxy-server='direct://'",  # Ignora proxies
+                "--proxy-bypass-list=*"         # 
             ]
         )
             
@@ -64,6 +75,10 @@ async def buscar_passagens_onibus(origem, destino, data, passageiros):
 
             return resultados
 
+        # except Exception as e:
+        #     log_message(f"Erro ao buscar preços: {e}")
+        #     return ["Erro ao buscar preços"]
         except Exception as e:
-            log_message(f"Erro ao buscar preços: {e}")
+            log_message(f"Erro crítico: {str(e)}")
+            log_message(f"Stack trace: {traceback.format_exc()}")  # Adicione esta linha
             return ["Erro ao buscar preços"]
