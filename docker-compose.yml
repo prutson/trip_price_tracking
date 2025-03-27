@@ -1,13 +1,12 @@
 version: '3.8'
 
 services:
-  api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: trip-api-container
+  trip-api-container:
+    image: trip_price_tracking_api
     ports:
       - "8080:8080"
-    env_file:
-      - .env
-    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 1024M
+
