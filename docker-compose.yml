@@ -5,6 +5,9 @@ services:
     image: trip_price_tracking_api
     ports:
       - "8080:8080"
+    env_file:
+      - .env
+    restart: always
     deploy:
       resources:
         limits:
