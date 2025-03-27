@@ -2,7 +2,8 @@ version: '3.8'
 
 services:
   trip-api-container:
-    image: trip_price_tracking_api
+    build:
+      context: .
     ports:
       - "8080:8080"
     env_file:
@@ -12,4 +13,3 @@ services:
       resources:
         limits:
           memory: 1024M
-
