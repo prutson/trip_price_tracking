@@ -10,7 +10,11 @@ async def buscar_passagens_onibus(origem, destino, data, passageiros):
          # await page.goto(url)
          browser = await p.chromium.launch(
          headless=True,
-         args=["--disable-blink-features=AutomationControlled"]
+         args=[
+            "--disable-blink-features=AutomationControlled",
+            "--no-sandbox",
+            "--disable-setuid-sandbox"
+        ]
          )
          
          context = await browser.new_context(
@@ -25,7 +29,7 @@ async def buscar_passagens_onibus(origem, destino, data, passageiros):
  
  
          try:
-             await page.wait_for_selector('.modal-wheel', state='detached', timeout=30000)
+             await page.wait_for_selector('.modal-wheel', state='detached', timeout=60000)
              await page.wait_for_timeout(5000)
  
              precos = await page.query_selector_all('[data-testid="tripPriceOutput"].value')
@@ -57,7 +61,7 @@ async def buscar_passagens_onibus(origem, destino, data, passageiros):
         #  except Exception as e:
         #      log_message("Erro ao buscar preços:", e)
         #      return []
-        # ...
+
          except Exception as e:
             log_message("Erro ao buscar preços:", e)
             await page.screenshot(path="erro.png", full_page=True)

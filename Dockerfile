@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
     wget \
     curl \
     unzip \
+    xvfb \
     fonts-liberation \
     libnss3 \
     libatk-bridge2.0-0 \
@@ -40,4 +41,5 @@ RUN playwright install --with-deps
 EXPOSE 5000
 
 # Comando para rodar sua aplicação
-CMD ["python", "main.py"]
+CMD ["xvfb-run", "-a", "python", "main.py"]
+
