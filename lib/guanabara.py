@@ -15,14 +15,19 @@ async def buscar_passagens_onibus(origem, destino, data, passageiros):
         
         page = await context.new_page()
         await page.goto(url)
+        await page.screenshot(path="screenshot.png", full_page=True)
 
-
+        html = await page.content()
+        with open("pagina.html", "w", encoding="utf-8") as f:
+            f.write(html)
 
         try:
-            await page.wait_for_selector('.modal-wheel', state='detached', timeout=30000)
+            # await page.wait_for_selector('.modal-wheel', state='detached', timeout=30000)
+            await page.wait_for_selector('[data-testid="tripPriceOutput"]', timeout=30000)
             await page.wait_for_timeout(5000)
 
-            precos = await page.query_selector_all('[data-testid="tripPriceOutput"].value')
+            # precos = await page.query_selector_all('[data-testid="tripPriceOutput"].value')
+            precos = await page.query_selector_all('[data-testid="tripPriceOutput"]')
             saidas = await page.query_selector_all('span.trip-time-number:nth-child(1)')
             chegadas = await page.query_selector_all('span.trip-time-number:nth-child(2)')
             categorias = await page.query_selector_all('[data-testid="tripClassNameOutput"]')
