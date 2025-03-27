@@ -5,24 +5,33 @@ async def buscar_passagens_onibus(origem, destino, data, passageiros):
     url = f"https://viajeguanabara.com.br/onibus/{origem}/{destino}?departureDate={data}&passengers=1:{passageiros}"
     log_message(f"Fazendo busca em: {url}")
     async with async_playwright() as p:
-         # browser = await p.chromium.launch(headless=False)  # Coloque headless=True se for rodar como API
-         # page = await browser.new_page()
-         # await page.goto(url)
         browser = await p.chromium.launch(
-        headless=True,
-        args=["--disable-blink-features=AutomationControlled"]
+            headless=True,
+            args=[
+                "--no-sandbox",
+                "--disable-setuid-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-blink-features=AutomationControlled"
+            ]
         )
-         
+            
         context = await browser.new_context(
-            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            viewport={"width": 1920, "height": 1080},
+            java_script_enabled=True,
+            bypass_csp=True
         )
 
         page = await context.new_page()
         await page.goto(url)
 
         try:
-            await page.wait_for_selector('.modal-wheel', state='detached', timeout=60000)
-            await page.wait_for_timeout(10000)
+            await page.wait_for_selector('.modal-wheel', state='detached', timeout=30000)
+            await page.evaluate('window.scrollTo(0, document.body.scrollHeight)')  # Força renderização
+            await page.wait_for_function(
+                '''() => document.querySelectorAll('[data-testid="tripPriceOutput"]').length > 0''',
+                timeout=60000
+)
 
             precos = await page.query_selector_all('[data-testid="tripPriceOutput"].value')
             saidas = await page.query_selector_all('span.trip-time-number:nth-child(1)')
