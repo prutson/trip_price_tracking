@@ -1,27 +1,21 @@
 from playwright.async_api import async_playwright
 from lib.shared import *
- 
+
 async def buscar_passagens_onibus(origem, destino, data, passageiros):
      url = f"https://viajeguanabara.com.br/onibus/{origem}/{destino}?departureDate={data}&passengers=1:{passageiros}"
- 
+     log_message(f"Fazendo busca em: {url}")
      async with async_playwright() as p:
          # browser = await p.chromium.launch(headless=False)  # Coloque headless=True se for rodar como API
          # page = await browser.new_page()
          # await page.goto(url)
          browser = await p.chromium.launch(
          headless=True,
-         args=[
-            "--disable-blink-features=AutomationControlled",
-            "--no-sandbox",
-            "--disable-setuid-sandbox"
-        ]
+         args=["--disable-blink-features=AutomationControlled"]
          )
          
          context = await browser.new_context(
-            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                       "AppleWebKit/537.36 (KHTML, like Gecko) "
-                       "Chrome/122.0.0.0 Safari/537.36"
-        )
+             user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+         )
          
          page = await context.new_page()
          await page.goto(url)
@@ -30,7 +24,7 @@ async def buscar_passagens_onibus(origem, destino, data, passageiros):
  
          try:
              await page.wait_for_selector('.modal-wheel', state='detached', timeout=60000)
-             await page.wait_for_timeout(5000)
+             await page.wait_for_timeout(20000)
  
              precos = await page.query_selector_all('[data-testid="tripPriceOutput"].value')
              saidas = await page.query_selector_all('span.trip-time-number:nth-child(1)')
@@ -58,11 +52,6 @@ async def buscar_passagens_onibus(origem, destino, data, passageiros):
  
              return resultados
  
-        #  except Exception as e:
-        #      log_message("Erro ao buscar preços:", e)
-        #      return []
-
          except Exception as e:
-            log_message("Erro ao buscar preços:", e)
-            await page.screenshot(path="erro.png", full_page=True)
-            return []
+             log_message("Erro ao buscar preços:", e)
+             return ["Erro ao buscar preços:", e]
