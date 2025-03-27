@@ -9,7 +9,7 @@ async def buscar_passagens_onibus(origem, destino, data, passageiros):
          # page = await browser.new_page()
          # await page.goto(url)
          browser = await p.chromium.launch(
-         headless=False,
+         headless=True,
          args=["--disable-blink-features=AutomationControlled"]
          )
          
