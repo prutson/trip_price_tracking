@@ -4,9 +4,6 @@ async def buscar_passagens_onibus(origem, destino, data, passageiros):
     url = f"https://viajeguanabara.com.br/onibus/{origem}/{destino}?departureDate={data}&passengers=1:{passageiros}"
 
     async with async_playwright() as p:
-        # browser = await p.chromium.launch(headless=False)  # Coloque headless=True se for rodar como API
-        # page = await browser.new_page()
-        # await page.goto(url)
         browser = await p.chromium.launch(
         headless=True,
         args=["--disable-blink-features=AutomationControlled"]
