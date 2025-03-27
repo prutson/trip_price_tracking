@@ -13,3 +13,9 @@ services:
       resources:
         limits:
           memory: 1024M
+    shm_size: '512mb'  # Aumenta a memória compartilhada
+    environment:
+      - PLAYWRIGHT_DEBUG=1  # Habilita logs detalhados do Playwright
+      - NODE_ENV=production
+    cap_add:  # Adiciona capacidades necessárias
+      - SYS_ADMIN

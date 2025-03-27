@@ -56,5 +56,5 @@ async def buscar_passagens_onibus(origem, destino, data, passageiros):
             return resultados
 
         except Exception as e:
-            log_message("Erro ao buscar preços:", e)
-            return ["Erro ao buscar preços:"]
+            log_message(f"Erro ao buscar preços: {e}")
+            return ["Erro ao buscar preços"]

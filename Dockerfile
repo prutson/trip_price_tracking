@@ -42,4 +42,3 @@ EXPOSE 5000
 
 # Comando para rodar sua aplicação
 CMD ["python", "main.py"]
-
