@@ -63,3 +63,10 @@ docker-compose build && docker-compose up -d
     ]
 }
 ```
+
+## 💜 Apoie este projeto
+
+Se meu código te ajudou ou você quer incentivar meu trabalho, pode me pagar um café via PIX!  
+
+**Chave PIX:**  
+`b3ebc88c-6b71-4134-aeb9-6fdb6cc0e6a0`
