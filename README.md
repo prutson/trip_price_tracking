@@ -13,6 +13,11 @@ API_TOKEN=<SEU_TOKEN>
 docker-compose build && docker-compose up -d
 ```
 
+ou se for no Windows
+```bash
+docker-compose build ; docker-compose up -d
+```
+
 ## 🤖 Exemplo de requisição
 
 1. Coloque no body as informações de origem, destino, data e quantidade de passageiros

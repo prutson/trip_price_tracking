@@ -1,6 +1,7 @@
 from playwright.async_api import async_playwright
 from lib.shared import *
 import traceback
+from fake_useragent import UserAgent
 
 async def buscar_passagens_onibus(origem, destino, data, passageiros):
     url = f"https://viajeguanabara.com.br/onibus/{origem}/{destino}?departureDate={data}&passengers=1:{passageiros}"
@@ -15,9 +16,14 @@ async def buscar_passagens_onibus(origem, destino, data, passageiros):
                 "--disable-blink-features=AutomationControlled"
             ]
         )
-            
+        
+        ua = UserAgent()
+        user_agent = ua.random
+        log_message(f"User Agent: {user_agent}")
+        
         context = await browser.new_context(
-            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            # user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            user_agent=user_agent,
             java_script_enabled=True,
             bypass_csp=True
         )
